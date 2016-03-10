@@ -1,0 +1,17 @@
+{
+  "name": "pyt",
+  "version": "0.2.0",
+  "description": "Parallax Your Things - fast, dependency-free, flexible parallax",
+  "main": "pyt.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "parallax",
+    "your",
+    "things",
+    "pyt"
+  ],
+  "author": "David Sicher",
+  "license": "ISC"
+}
