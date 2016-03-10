@@ -8,7 +8,7 @@
        \ \_\     /\___/
         \/_/     \/__/
 
-PARALLAX YOUR THINGS
+## PARALLAX YOUR THINGS
 
 Fast, dependency-free, flexible parallax
 
