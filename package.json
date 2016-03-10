@@ -1,6 +1,6 @@
 {
   "name": "pyt",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Parallax Your Things - fast, dependency-free, flexible parallax",
   "repository": "https://github.com/dsicher/pyt",
   "main": "pyt.js",
