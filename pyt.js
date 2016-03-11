@@ -107,14 +107,12 @@ pyt.prototype.parallaxAllEls = function() {
 
 	this.parallaxOpts.forEach(this.checkScroll.bind(this));
 
-
 	if (this.transformStrings.length >= 1) {
 		this.el.style.transform = this.transformStrings.join(' ');
 		this.el.style.webkitTransform = this.transformStrings.join(' ');
 	}
 }
 
-module.exports = {
-	pyt: pyt,
-	throttledScrollController: pytUtils.throttledScrollController
-}
+pyt.scrollController = pytUtils.throttledScrollController;
+
+module.exports = pyt;
