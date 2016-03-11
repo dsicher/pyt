@@ -80,8 +80,7 @@ var throttle = function(type, name, obj) {
     obj.addEventListener(type, func);
 };
 
-
-var throttledScrollController = function(customEvtName) {
+var throttledScrollController = function() {
     var scrollListeners = [];
 
     var pushNewListener = function(fn) {
@@ -107,8 +106,8 @@ var throttledScrollController = function(customEvtName) {
       });
     }
 
-    throttle('scroll', customEvtName);
-    window.addEventListener(customEvtName, handleScroll);
+    throttle('scroll', 'pyt-throttled-scroll-event');
+    window.addEventListener('pyt-throttled-scroll-event', handleScroll);
     return {
         pushNewListener: pushNewListener,
         removeListener: removeListener,

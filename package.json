@@ -2,7 +2,10 @@
   "name": "pyt",
   "version": "0.2.3",
   "description": "Parallax Your Things - fast, dependency-free, flexible parallax",
-  "repository": "https://github.com/dsicher/pyt",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dsicher/pyt.git"
+  },
   "main": "pyt.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,6 +16,18 @@
     "things",
     "pyt"
   ],
-  "author": "David Sicher",
-  "license": "ISC"
+  "author": {
+    "name": "David Sicher"
+  },
+  "license": "ISC",
+  "readme": "                    __\n                   /\\ \\__\n     _____   __  __\\ \\ ,_\\\n    /\\ '__`\\/\\ \\/\\ \\\\ \\ \\/\n    \\ \\ \\L\\ \\ \\ \\_\\ \\\\ \\ \\_\n     \\ \\ ,__/\\/`____ \\\\ \\__\\\n      \\ \\ \\/  `/___/> \\\\/__/\n       \\ \\_\\     /\\___/\n        \\/_/     \\/__/\n\n## PARALLAX YOUR THINGS\n\nFast, dependency-free, flexible parallax\n\n## Installation\n\n    $ npm install pyt",
+  "readmeFilename": "README.md",
+  "gitHead": "ebff9e762c555c8efbea467af51bb94895001362",
+  "bugs": {
+    "url": "https://github.com/dsicher/pyt/issues"
+  },
+  "homepage": "https://github.com/dsicher/pyt#readme",
+  "_id": "pyt@0.2.3",
+  "_shasum": "ed81765ff2f7e6809ab1c1f9a2f7df543461ec80",
+  "_from": "pyt@*"
 }

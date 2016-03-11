@@ -3,7 +3,7 @@
 var namedColors = {
 	lightpink: "rgb(255,182,193)",
 	pink: "rgb(255,192,203)",
-	crimson: "rgb(220,020,60"),
+	crimson: "rgb(220,020,60)",
 	lavenderblush: "rgb(255,240,245)",
 	palevioletred: "rgb(219,112,147)",
 	hotpink: "rgb(255,105,180)",

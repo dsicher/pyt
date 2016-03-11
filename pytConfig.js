@@ -26,10 +26,15 @@
 
 'use strict'
 
-import pytColorConverter from './pytColorConverter';
+var pytColorConverter = require('./pytColorConverter');
 
 var pytConfig = function pytConfig(config) {
 	this.config = config;
+	this.viewportEnd = 0;
+	this.viewportStart = 1;
+	this.trackingEl = null;
+	this.endWithTop = false;
+	this.startWithBottom = false;
 	if (!pytConfig.prototype.hasOwnProperty(config.property)) {
 		throw(config.property + ' is not a valid pytConfig parameter');
 	} else {
@@ -37,13 +42,7 @@ var pytConfig = function pytConfig(config) {
 	}
 }
 
-pytConfig.prototype.viewportEnd = 0;
-pytConfig.prototype.viewportStart = 1;
-pytConfig.prototype.trackingEl = null;
-pytConfig.prototype.endWithTop = false;
-pytConfig.prototype.startWithBottom = false;
-
-pytConfig.prototype.backgroundColor = function() {
+pytConfig.prototype.backgroundColor = function(config) {
 	this.property = 'backgroundColor';
 	this.initColorProperty(config);
 	this.returnCurrentStyle = this.processColorStyle;
@@ -424,7 +423,7 @@ pytConfig.prototype.scaleZ = function() {
 
 pytConfig.prototype.rotate = function() {
 	this.property = 'rotate';
-	this.startValue = -100;
+	this.startValue = -30;
 	this.endValue = 0;
 	this.units = 'deg'
 	this.returnCurrentStyle = this.processTransformStyle;
@@ -476,7 +475,7 @@ pytConfig.prototype.processDelta = function(a, b, delta) {
 
 pytConfig.prototype.processGenericStyle = function (delta) {
 	var valueString = '' +
-					  this.processDelta(this.startValue, this.endValue, delta)) +
+					  pytConfig.prototype.processDelta(this.startValue, this.endValue, delta) +
 					  this.units;
 
 	return valueString;
@@ -484,7 +483,7 @@ pytConfig.prototype.processGenericStyle = function (delta) {
 
 pytConfig.prototype.processTransformStyle = function (delta) {
 	var valueString = this.property + '(' +
-					  this.processDelta(this.startValue, this.endValue, delta) +
+					  pytConfig.prototype.processDelta(this.startValue, this.endValue, delta) +
 					  this.units +
 					  ')';
 
@@ -493,14 +492,13 @@ pytConfig.prototype.processTransformStyle = function (delta) {
 
 pytConfig.prototype.processColorStyle = function (delta) {
 	var valueString = 'rgb(' +
-					  this.processDelta(this.rStart, this.rEnd, delta) +
+					  Math.floor(pytConfig.prototype.processDelta(this.rStart, this.rEnd, delta)) +
 					  ', ' +
-					  this.processDelta(this.gStart, this.gEnd, delta) +
+					  Math.floor(pytConfig.prototype.processDelta(this.gStart, this.gEnd, delta)) +
 					  ', ' +
-					  this.processDelta(this.bStart, this.bEnd, delta) +
+					  Math.floor(pytConfig.prototype.processDelta(this.bStart, this.bEnd, delta)) +
 					  ')';
-
 	return valueString;
 }
 
-modules.exports = pytConfig;
+module.exports = pytConfig;
