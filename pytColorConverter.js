@@ -51,7 +51,6 @@ var namedColors = {
 	lightcyan: "rgb(224,255,255)",
 	paleturquoise: "rgb(175,238,238)",
 	aqua: "rgb(000,255,255)",
-	aqua: "rgb(000,255,255)",
 	darkcyan: "rgb(000,139,139)",
 	teal: "rgb(000,128,128)",
 	darkslategray: "rgb(047,079,079)",
