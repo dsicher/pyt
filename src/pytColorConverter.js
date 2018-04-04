@@ -1,5 +1,3 @@
-'use strict'
-
 var namedColors = {
 	lightpink: "rgb(255,182,193)",
 	pink: "rgb(255,192,203)",
@@ -141,53 +139,64 @@ var namedColors = {
 	black: "rgb(000,000,000)"
 };
 
-var rgbFromNamedColor = function (color) {
-	var colorIndex = Object.keys(namedColors).indexOf(color);
-
-	if (colorIndex != -1) {
-		return namedColors[Object.keys(namedColors)[colorIndex]];
-	} else {
-		return false;
-	}
-};
+var rgbFromNamedColor = color => namedColors[color] || false;
 
 var RGBregex = /^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/;
 
 var HEXregex = /^([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/;
 
-var colorToStrippedRGB = function(regexMatch, radix) {
-	if (radix != 10 && radix != 16) {
-		throw ('error in pytColorConverter.colorToStrippedRGB, invalid radix')
-	}
-	var r = parseInt(regexMatch[1], radix);
-	var g = parseInt(regexMatch[2], radix);
-	var b = parseInt(regexMatch[3], radix);
-	if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255) {
-		return [r, g, b];
+var returnRGB = function(val, isHex) {
+	var radix = isHex ? 16 : 10;
+
+	val = parseInt(val, radix);
+
+	if (typeof val === 'number' && val >= 0 && val <= 255) {
+		return val;
 	} else {
-		throw ('error in pytColorConverter.colorToStrippedRGB, invalid regexMatch value')
+		throw ('error in pytColorConverter.returnRGB, invalid color value')
 	};
 }
 
-var pytColorConverter = function (input) {
-	input = input.toLowerCase();
+var convertColorStringToNumberArray = function(color, isHex) {
+	var r = returnRGB(color[1], isHex);
+	var g = returnRGB(color[2], isHex);
+	var b = returnRGB(color[3], isHex);
+	return [r, g, b];
+}
 
-	if (rgbFromNamedColor(input)) {
-		input = rgbFromNamedColor(input);
+var cleanHexString = function(input) {
+	// Strip hex leading pound if there is one
+	var cleanHex = input.replace(/^\s*#|\s*$/g, "");
+	// If 3 characters remain, assume it is a 3 character hex value and double each
+	if (cleanHex.length === 3) {
+		cleanHex = cleanHex.replace(/(.)/g, "$1$1");
+	}
+	return cleanHex;
+}
+
+var normalizeColorInput = input => {
+	var normalizedColor, rgbValue, hexValue = false;
+	var processedColorValue = input.toLowerCase();
+	var namedValue = rgbFromNamedColor(processedColorValue);
+	if (namedValue) {
+		normalizedColor = RGBregex.exec(namedValue);
 	} else {
-		input = input.replace(/^\s*#|\s*$/g, "");
-		if (input.length === 3) {
-			input = input.replace(/(.)/g, "$1$1");
-		}
+		processedColorValue = cleanHexString(processedColorValue);
+		rgbValue = RGBregex.exec(processedColorValue);
+		hexValue = HEXregex.exec(processedColorValue);
+		normalizedColor = rgbValue || hexValue;
 	}
 
-	if (RGBregex.exec(input)) {
-		return colorToStrippedRGB(RGBregex.exec(input), 10)
-	} else if (HEXregex.exec(input)) {
-		return colorToStrippedRGB(HEXregex.exec(input), 16)
-	} else {
-		throw ('error in pytColorConverter: colors must be named colors, rgb, or hex values')
+	if (!normalizedColor) {
+		throw ('error in normalizeColorInput: colors must be named colors, rgb, or hex values')
 	}
+	return { color: normalizedColor, isHex: !!hexValue	};
+}
+
+var pytColorConverter = function(input) {
+	var normalizedColorObj = normalizeColorInput(input);
+
+	return convertColorStringToNumberArray(normalizedColorObj.color, normalizedColorObj.isHex)
 };
 
-module.exports = pytColorConverter;
+export default pytColorConverter;

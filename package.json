@@ -6,8 +6,11 @@
     "type": "git",
     "url": "git+https://github.com/dsicher/pyt.git"
   },
-  "main": "pyt.js",
+  "main": "dist/pyt.js",
   "scripts": {
+    "build": "babel src --out-dir dist",
+    "preversion": "npm run build",
+    "prepublish": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -29,5 +32,18 @@
   "homepage": "https://github.com/dsicher/pyt#readme",
   "_id": "pyt@0.2.3",
   "_shasum": "ed81765ff2f7e6809ab1c1f9a2f7df543461ec80",
-  "_from": "pyt@*"
+  "_from": "pyt@*",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.6.1"
+  },
+  "babel": {
+    "presets": [
+      "babel-preset-env"
+    ],
+    "plugins": [
+      "transform-class-properties"
+    ]
+  }
 }

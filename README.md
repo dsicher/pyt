@@ -20,22 +20,19 @@ Documentation coming soon.
     $ npm install pyt
 
 ## Usage
+    var PYT = new pyt();
 
-    var scrllr = pyt.scrollController();
-
-    new pyt({
+    PYT.addNode({
         el: document.getElementById('myElement'),
-        scrollcontroller: scrllr,
         parallaxConfig: {
             property: 'backgroundColor',
             startValue: 'rgb(255, 255, 255)',
             endValue: '#000'
         }
-    })
+    });
 
-    new pyt({
+    PYT.addNode({
         el: document.getElementById('myElement2'),
-        scrollcontroller: scrllr,
         parallaxConfig: [
             {
                 property: 'translateY',
@@ -56,9 +53,8 @@ Documentation coming soon.
         ]
     });
 
-    new pyt({
+    PYT.addNode({
         el: document.getElementById('myElement3'),
-        scrollcontroller: scrllr,
         parallaxConfig: [
             {
                 property: 'translateZ',
