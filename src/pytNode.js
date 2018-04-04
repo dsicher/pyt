@@ -19,7 +19,7 @@ export default class pytNode {
     scrollController.pushNewListener(this.parallaxAllProperties);
     this.parallaxAllProperties();
   }
-  pushConfig = config => this.parallaxOpts.push(new pytProperty(this.el, config))
+  pushConfig = config => this.parallaxOpts.push(new pytProperty(config))
   calculateStyles = (config, delta) => {
     if (config.isTransform) {
       this.transformStrings.push(config.returnCurrentStyle(delta));

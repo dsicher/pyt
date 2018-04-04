@@ -139,13 +139,13 @@ var namedColors = {
   black: "rgb(000,000,000)"
 };
 
-var rgbFromNamedColor = color => namedColors[color] || false;
-
 var RGBregex = /^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/;
 
 var HEXregex = /^([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/;
 
-var returnRGB = function(val, isHex) {
+var rgbFromNamedColor = color => namedColors[color] || false;
+
+var returnRGB = (val, isHex) => {
   var radix = isHex ? 16 : 10;
 
   val = parseInt(val, radix);
@@ -157,14 +157,14 @@ var returnRGB = function(val, isHex) {
   };
 }
 
-var convertColorStringToNumberArray = function(color, isHex) {
+var convertColorStringToNumberArray = (color, isHex) => {
   var r = returnRGB(color[1], isHex);
   var g = returnRGB(color[2], isHex);
   var b = returnRGB(color[3], isHex);
   return [r, g, b];
 }
 
-var cleanHexString = function(input) {
+var cleanHexString = input => {
   // Strip hex leading pound if there is one
   var cleanHex = input.replace(/^\s*#|\s*$/g, "");
   // If 3 characters remain, assume it is a 3 character hex value and double each
@@ -193,7 +193,7 @@ var normalizeColorInput = input => {
   return { color: normalizedColor, isHex: !!hexValue  };
 }
 
-var pytColorConverter = function(input) {
+var pytColorConverter = input => {
   var normalizedColorObj = normalizeColorInput(input);
 
   return convertColorStringToNumberArray(normalizedColorObj.color, normalizedColorObj.isHex)

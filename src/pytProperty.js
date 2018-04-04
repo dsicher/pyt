@@ -1,9 +1,8 @@
 import pytColorConverter from './pytColorConverter';
 
 export default class pytProperty {
-  constructor(el, config) {
+  constructor(config) {
     this.config = config;
-    this.trackingEl = el;
     this.pytClass = config.pytClass || 'animate';
     this.viewportStart = config.viewportStart !== undefined ? config.viewportStart : 1;
     this.viewportEnd = config.viewportEnd !== undefined ? config.viewportEnd : 0;
