@@ -38,8 +38,8 @@ Documentation coming soon.
                 property: 'translateY',
                 startValue: 0,
                 endValue: 200,
-                viewportStart: .6,
-                viewportEnd: .5,
+                viewportStart: 1,
+                viewportEnd: 0,
                 units: 'px'
             },
             {
