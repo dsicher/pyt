@@ -112,5 +112,5 @@ export default {
   hasClass,
   addClass,
   removeClass,
-	throttledScrollController
+  throttledScrollController
 }
