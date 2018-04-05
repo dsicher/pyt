@@ -46,63 +46,42 @@ var removeClass = (el, className) => {
   }
 };
 
-var dispatchCustomEvent = (name, obj) => {
+var dispatchCustomEvent = customEventName => {
   var evt = document.createEvent('Event');
-  evt.initEvent(name, true, true);
-  if (obj.dispatchEvent) { obj.dispatchEvent(evt); }
-    else if (obj.fireEvent) { obj.fireEvent(evt); }
+  evt.initEvent(customEventName, true, true);
+  if (window.dispatchEvent) { window.dispatchEvent(evt); }
+    else if (window.fireEvent) { window.fireEvent(evt); }
     else { throw('this browser does not support custom events'); }
 };
 
-var throttleEvent = (eventToThrottle, newEvent, obj = window) => {
-  var running = false;
+var throttleEvent = (eventToThrottle, newEvent) => {
+  var blockEvents = false;
 
   var dispatchThrottledEvent = () => {
-    dispatchCustomEvent(newEvent, obj);
-    running = false;
+    dispatchCustomEvent(newEvent);
+    blockEvents = false;
   }
 
   var throttledEventListener = () => {
-    if (running) { return; }
-    running = true;
+    if (blockEvents) { return; }
+    blockEvents = true;
     requestAnimationFrame(dispatchThrottledEvent);
   };
 
-  obj.addEventListener(eventToThrottle, throttledEventListener);
+  window.addEventListener(eventToThrottle, throttledEventListener);
 };
 
-var throttledScrollController = () => {
-  var scrollListeners = [];
-
-  var pushNewListener = fn => {
-    if (typeof fn === 'function') {
-      scrollListeners.push(fn);
-      return (scrollListeners.length-1);
-    } else {
-      throw('pushNewListener must take a function as an argument');
-    }
+var emitThrottledScroll = () => {
+  if (!window.emittingThrottledScroll) {
+    throttleEvent('scroll', 'pyt-throttled-scroll');
+    window.emittingThrottledScroll = true;
   }
+}
 
-  var removeListener = index => {
-    scrollListeners[index] = null;
-    scrollListeners.splice(index, 1);
-  }
-
-  var getScrollPosition = () => {
-    var supportPageOffset = window.pageXOffset !== undefined;
-    var isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
-    return (supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop) + window.innerHeight;
-  }
-
-  var handleScroll = () => scrollListeners.forEach(el => el());
-
-  throttleEvent('scroll', 'pyt-throttled-scroll-event');
-  window.addEventListener('pyt-throttled-scroll-event', handleScroll);
-
-  return {
-    pushNewListener: pushNewListener,
-    removeListener: removeListener,
-    getScrollPosition: getScrollPosition
+var emitThrottledResize = () => {
+  if (!window.emittingThrottledResize) {
+    throttleEvent('resize', 'pyt-throttled-resize');
+    window.emittingThrottledResize = true;
   }
 }
 
@@ -112,5 +91,6 @@ export default {
   hasClass,
   addClass,
   removeClass,
-  throttledScrollController
+  emitThrottledScroll,
+  emitThrottledResize,
 }

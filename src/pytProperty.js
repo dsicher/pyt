@@ -4,16 +4,26 @@ export default class pytProperty {
   constructor(config) {
     this.config = config;
     this.pytClass = config.pytClass || 'animate';
-    this.viewportStart = config.viewportStart !== undefined ? config.viewportStart : 1;
-    this.viewportEnd = config.viewportEnd !== undefined ? config.viewportEnd : 0;
+    this.startingPerc = config.startingPerc !== undefined ? config.startingPerc : 1;
+    this.endingPerc = config.endingPerc !== undefined ? config.endingPerc : 0;
     this.startWithBottom = config.startWithBottom || false;
     this.endWithTop = config.endWithTop || false;
     this.isTransform = false;
+    this.updateParallaxPoints();
+
+    this.callback = config.callback || false;
+    this.preFn = config.preFn || false;
+    this.postFn = config.postFn || false;
+
     if (!pytProperty.prototype.hasOwnProperty(this.config.property)) {
       throw(`${this.config.property} is not a valid pytProperty parameter`);
     } else {
       this[this.config.property]();
     }
+  }
+  updateParallaxPoints() {
+    this.parallaxStart = window.innerHeight * this.startingPerc;
+    this.parallaxEnd = window.innerHeight * this.endingPerc;
   }
   requires(requiredArray) {
     for (var i = 0, x = requiredArray.length ; i < x ; i++) {

@@ -1,12 +1,17 @@
 import pytUtils from './pytUtils';
 import pytNode  from './pytNode';
+import pytTriggerNode  from './pytTriggerNode';
 
 export default class PYT {
   constructor() {
-    this.scrollController = pytUtils.throttledScrollController();
+    pytUtils.emitThrottledResize();
+    pytUtils.emitThrottledScroll();
     this.nodes = [];
   }
   addNode(opts) {
-    this.nodes.push(new pytNode(this.scrollController, opts));
+    this.nodes.push(new pytNode(opts));
+  }
+  addTriggerNode(opts) {
+    this.nodes.push(new pytTriggerNode(opts));
   }
 }

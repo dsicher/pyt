@@ -2,10 +2,11 @@ import pytUtils from './pytUtils';
 import pytProperty from './pytProperty';
 
 export default class pytNode {
-  constructor(scrollController, opts) {
+  constructor(opts) {
     pytUtils.requiredParameters('pytNode', ['el', 'parallaxConfig'], opts);
 
     this.el = opts.el;
+    this.parallaxTarget = opts.parallaxTarget || this.el;
     this.parallaxOpts = [];
     this.pytState = [];
 
@@ -15,56 +16,56 @@ export default class pytNode {
       this.pushConfig(opts.parallaxConfig);
     }
 
-    this.classTargets = opts.classTargets ? [this.el].concat(opts.classTargets) : [this.el];
-    scrollController.pushNewListener(this.parallaxAllProperties);
-    this.parallaxAllProperties();
+    this.classTargets = opts.classTargets ? [this.parallaxTarget].concat(opts.classTargets) : [this.parallaxTarget];
+
+    window.addEventListener('pyt-throttled-scroll', this.handleScroll);
+    window.addEventListener('pyt-throttled-resize', this.handleResize);
+
+    this.handleResize();
   }
   pushConfig = config => this.parallaxOpts.push(new pytProperty(config))
-  calculateStyles = (config, delta) => {
-    if (config.isTransform) {
-      this.transformStrings.push(config.returnCurrentStyle(delta));
+  calculateStyles = (pytProp, delta) => {
+    if (pytProp.isTransform) {
+      this.transformStrings.push(pytProp.returnCurrentStyle(delta));
     } else {
-      this.el.style[config.property] = config.returnCurrentStyle(delta);
+      this.parallaxTarget.style[pytProp.property] = pytProp.returnCurrentStyle(delta);
     }
   }
-  getParallaxStart = i => window.innerHeight * this.parallaxOpts[i].viewportStart;
-  getParallaxEnd = i => window.innerHeight * this.parallaxOpts[i].viewportEnd;
-  getParallaxArea = i => {
-    var offset = this.parallaxOpts.viewportEndWithTop || this.parallaxOpts.viewportStartWithBottom ? 0 : this.el.offsetHeight;
-    return this.parallaxOpts.viewportEnd > this.parallaxOpts.viewportStart ? offset - (this.getParallaxEnd(i) - this.getParallaxStart(i)) : offset + this.getParallaxStart(i) - this.getParallaxEnd(i);
-  }
-  getParallaxTarget = i => (1-((this.getTargetEnd(i) - this.getParallaxEnd(i)) / this.getParallaxArea(i)));
+  getParallaxArea = i => this.parallaxOpts[i].endingPerc > this.parallaxOpts[i].startingPerc
+    ? this.el.offsetHeight - this.parallaxOpts[i].parallaxStart - this.parallaxOpts[i].parallaxEnd
+    : this.el.offsetHeight + this.parallaxOpts[i].parallaxStart - this.parallaxOpts[i].parallaxEnd;
+  getParallaxTarget = i => (1-((this.getTargetEnd(i) - this.parallaxOpts[i].parallaxEnd) / this.getParallaxArea(i)));
   getTargetStart = i => this.parallaxOpts[i].startWithBottom ? this.elPosition.bottom : this.elPosition.top;
   getTargetEnd = i => this.parallaxOpts[i].endWithTop ? this.elPosition.top : this.elPosition.bottom;
-  checkScroll = (config, i, arr) => {
-    if (this.getTargetStart(i) < this.getParallaxStart(i) && this.getTargetEnd(i) > this.getParallaxEnd(i)) {
+  checkScroll = (pytProp, i, arr) => {
+    if (this.getTargetStart(i) < this.parallaxOpts[i].parallaxStart && this.getTargetEnd(i) > this.parallaxOpts[i].parallaxEnd) {
+      this.calculateStyles(pytProp, this.getParallaxTarget(i));
       if (this.pytState[i] != 'pyt') {
-        if (config.pytClass) {
-          pytUtils.addClass(this.classTargets, 'pyt_' + config.pytClass);
-          pytUtils.removeClass(this.classTargets, ['prepyt_' + config.pytClass, 'postpyt_' + config.pytClass]);
-        }
+        pytUtils.addClass(this.classTargets, `pyt-${pytProp.pytClass}`);
+        pytUtils.removeClass(this.classTargets, [`pre-pyt-${pytProp.pytClass}`, `post-pyt-${pytProp.pytClass}`]);
         this.pytState[i] = 'pyt';
+        this.parallaxOpts[i].callback && this.parallaxOpts[i].callback();
       }
-      this.calculateStyles(config, this.getParallaxTarget(i));
-    } else if (this.getTargetStart(i) >= this.getParallaxStart(i)) {
+    } else if (this.getTargetStart(i) >= this.parallaxOpts[i].parallaxStart) {
       if (this.pytState[i] != 'prepyt') {
-        if (config.pytClass) {
-          pytUtils.addClass(this.classTargets, 'prepyt_' + config.pytClass);
-          pytUtils.removeClass(this.classTargets, ['pyt_' + config.pytClass, 'postpyt_' + config.pytClass]);
-        }
+        pytUtils.addClass(this.classTargets, `pre-pyt-${pytProp.pytClass}`);
+        pytUtils.removeClass(this.classTargets, [`pyt-${pytProp.pytClass}`, `post-pyt-${pytProp.pytClass}`]);
         this.pytState[i] = 'prepyt';
-        this.calculateStyles(config, 0);
+        this.calculateStyles(pytProp, 0);
+        this.parallaxOpts[i].preFn && this.parallaxOpts[i].preFn();
       }
-    } else if (this.getTargetEnd(i) <= this.getParallaxEnd(i)) {
+    } else if (this.getTargetEnd(i) <= this.parallaxOpts[i].parallaxEnd) {
       if (this.pytState[i] != 'postpyt') {
-        if (config.pytClass) {
-          pytUtils.addClass(this.classTargets, 'postpyt_' + config.pytClass);
-          pytUtils.removeClass(this.classTargets, ['prepyt_' + config.pytClass, 'pyt_' + config.pytClass]);
-        }
+        pytUtils.addClass(this.classTargets, `post-pyt-${pytProp.pytClass}`);
+        pytUtils.removeClass(this.classTargets, [`pre-pyt-${pytProp.pytClass}`, `pyt-${pytProp.pytClass}`]);
         this.pytState[i] = 'postpyt';
-        this.calculateStyles(config, 1);
+        this.calculateStyles(pytProp, 1);
+        this.parallaxOpts[i].postFn && this.parallaxOpts[i].postFn();
       }
     }
+  }
+  updateAllParallaxPoints = () => {
+    this.parallaxOpts.forEach(el => el.updateParallaxPoints());
   }
   parallaxAllProperties = () => {
     this.transformStrings = [];
@@ -73,8 +74,15 @@ export default class pytNode {
     this.parallaxOpts.forEach(this.checkScroll);
 
     if (this.transformStrings.length >= 1) {
-      this.el.style.transform = this.transformStrings.join(' ');
-      this.el.style.webkitTransform = this.transformStrings.join(' ');
+      this.parallaxTarget.style.transform = this.transformStrings.join(' ');
+      this.parallaxTarget.style.webkitTransform = this.transformStrings.join(' ');
     }
+  }
+  handleScroll = () => {
+    this.parallaxAllProperties();
+  }
+  handleResize = () => {
+    this.updateAllParallaxPoints();
+    this.parallaxAllProperties();
   }
 }
