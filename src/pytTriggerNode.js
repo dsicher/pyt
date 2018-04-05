@@ -2,20 +2,20 @@ import pytUtils from './pytUtils';
 import pytProperty from './pytProperty';
 
 export default class pytTriggerNode {
-  constructor(opts) {
-    pytUtils.requiredParameters('pytTriggerNode', ['el', 'class'], opts);
+  constructor(config) {
+    pytUtils.requiredParameters('pytTriggerNode', ['el'], config);
 
-    this.el = opts.el;
-    this.parallaxTarget = opts.parallaxTarget || this.el;
+    this.el = config.el;
+    this.parallaxTarget = config.parallaxTarget || this.el;
 
-    this.class = opts.class;
-    this.triggerPerc = opts.triggerPerc || .8;
-    this.animateOnce = opts.animateOnce || false;
-    this.callback = opts.callback || false;
-    this.reset = opts.reset || false;
-    this.pytState = 'prepyt';
+    this.class = config.class !== undefined ? config.class : 'animate';
+    this.triggerPerc = config.triggerPerc !== undefined ? config.triggerPerc : .8;
+    this.animateOnce = !!config.animateOnce;
+    this.callback = typeof config.callback === 'function' ? config.callback : false;
+    this.reset = typeof config.reset === 'function' ? config.reset : false;
+    this.pytState = '';
 
-    this.classTargets = opts.classTargets ? [this.parallaxTarget].concat(opts.classTargets) : [this.parallaxTarget];
+    this.classTargets = config.classTargets ? [this.parallaxTarget].concat(config.classTargets) : [this.parallaxTarget];
 
     window.addEventListener('pyt-throttled-scroll', this.updateTriggerClass);
     window.addEventListener('pyt-throttled-resize', this.handleResize);

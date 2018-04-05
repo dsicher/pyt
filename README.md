@@ -12,7 +12,9 @@
 
 Fast, dependency-free, flexible parallax
 
-Most CSS properties implemented, more documentation coming soon.
+Use scroll position to create smooth animations, trigger CSS classes, or trigger function calls.
+\
+Most CSS properties implemented for smooth parallax, more documentation coming soon.
 
 ## Installation
 
@@ -28,9 +30,9 @@ PYT needs to be instantiated via class constructor.
 
 ```var PYT = new pyt();```
 
-PYT has methods to create two types of scroll-controlled nodes:
+PYT has methods to create three types of scroll-controlled nodes:
 
-```PYT.addNode()` and `PYT.addTriggerNode()```
+```PYT.addNode(), PYT.addTriggerNode(), and PYT.addCallbackNode()```
 
 ## .addNode()
 
@@ -76,7 +78,7 @@ PYT.addNode({
 
 >**property:** // REQUIRED
 >\
->The css property to animated, camelcase
+>The css property to animate, camelcase
 >\
 >\
 >**startValue:** // OPTIONAL, REQUIRED ONLY FOR COLORS, default varies
@@ -89,29 +91,34 @@ PYT.addNode({
 >The ending value for the animation
 >\
 >\
->**units:** // OPTIONAL, IGNORED FOR COLORS, default varies
+>**units:** // OPTIONAL, default varies
 >\
->The desired unit (ex. 'px', '%')
+>The desired unit (ex. 'px', '%'), ignored for colors
 >\
 >\
 >**startingPerc:** // OPTIONAL, default 1
 >\
->The starting position of the animation in the viewport, as a percent from 0-1
+>The starting position of the animation in the viewport, as a percent from 0-1 (smaller or larger values may work, representing space outside of the viewport)
 >\
 >\
 >**endingPerc:** // OPTIONAL, default 0
 >\
->The ending position of the animation in the viewport, as a percent from 0-1
+>The ending position of the animation in the viewport, as a percent from 0-1 (smaller or larger values may work, representing space outside of the viewport)
+>\
+>\
+>**class:** // OPTIONAL, default animate
+>\
+>The class suffix to add to the target element and any classTargets (if class: 'foo', the classes will be 'pre-pyt-foo', 'pyt-foo', and 'post-pyt-foo')
 >\
 >\
 >**startWithBottom:** // OPTIONAL, EXPERIMENTAL, default FALSE
 >\
->Measure the starting point for the animation from the bottom of the target el rather than the top, TRUE / FALSE
+>Measure the starting point for the animation from the bottom of the target el rather than the top
 >\
 >\
 >**endWithTop:** // OPTIONAL, EXPERIMENTAL, default FALSE
 >\
->Measure the ending point for the animation from the top of the target el rather than the bottom, TRUE / FALSE
+>Measure the ending point for the animation from the top of the target el rather than the bottom
 >\
 >\
 >**callback:** // OPTIONAL, EXPERIMENTAL
@@ -147,14 +154,14 @@ PYT.addTriggerNode({
 >The dom node to monitor for scroll position
 >\
 >\
->**class:** // REQUIRED
+>**class:** // OPTIONAL, defaults to animate
 >\
 >The class to add when the el is in range
 >\
 >\
 >**triggerPerc:** // OPTIONAL, defaults to .8
 >\
->The viewport position where the class will be added, measured from the top of **el**, as a percent from 0-1
+>The viewport position where the class will be added, measured from the top of **el**, as a percent from 0-1 (smaller or larger values may work, representing space outside of the viewport)
 >\
 >\
 >**animateOnce:** // OPTIONAL, defaults to FALSE
@@ -175,6 +182,54 @@ PYT.addTriggerNode({
 >**reset:** // OPTIONAL, EXPERIMENTAL
 >\
 >A function to execute when removing the class to the dom node
+
+## .addCallbackNode()
+
+`.addCallbackNode()` creates a node that will trigger JS functions based on scroll position.
+
+```
+PYT.addCallbackNode({
+  el: document.getElementById('myElement'),
+  callback: () => console.log('I\'m on screen!'),
+  reset: () => console.log('I\'m off screen!')
+});
+```
+
+#### .addCallbackNode() config options
+
+>**el:** // REQUIRED
+>\
+>The dom node to monitor for scroll position
+>\
+>\
+>**startingPerc:** // OPTIONAL, default 1
+>\
+>The trigger position in the viewport, as a percent from 0-1 (smaller or larger values may work, representing space outside of the viewport)
+>\
+>\
+>**endingPerc:** // OPTIONAL, default 0
+>\
+>The trigger position in the viewport, as a percent from 0-1 (smaller or larger values may work, representing space outside of the viewport)
+>\
+>\
+>**startWithBottom:** // OPTIONAL, EXPERIMENTAL, default FALSE
+>\
+>Measure the starting point from the bottom of the target el rather than the top
+>\
+>\
+>**endWithTop:** // OPTIONAL, EXPERIMENTAL, default FALSE
+>\
+>Measure the ending point from the top of the target el rather than the bottom
+>\
+>\
+>**callback:** // OPTIONAL
+>\
+>A function to execute when the node enters the threshold
+>\
+>\
+>**reset:** // OPTIONAL
+>\
+>A function to execute when the node leaves the threshold
 
 ## Examples
 ```
@@ -229,5 +284,13 @@ PYT.addTriggerNode({
   class: 'my-class',
   triggerPerc: .6,
   animateOnce: true
+});
+
+PYT.addCallbackNode({
+  el: document.getElementById('myCallbackElement'),
+  startingPerc: .8,
+  endingPerc: .2,
+  callback: callbackFn,
+  reset: resetFn,
 });
 ```
