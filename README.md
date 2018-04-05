@@ -20,6 +20,10 @@ Most CSS properties implemented, more documentation coming soon.
 
 ## Usage
 
+Import PYT.
+
+```import pyt from 'pyt';```
+
 PYT needs to be instantiated via class constructor.
 
 ```var PYT = new pyt();```
@@ -47,17 +51,17 @@ PYT.addNode({
 
 >**el:** // REQUIRED
 >\
->the dom node to monitor for scroll position
+>The dom node to monitor for scroll position
 >\
 >\
 >**parallaxConfig:** // REQUIRED, either an ARRAY or single OBJECT
 >\
->the pyt config object that describes the style transformations
+>The pyt config object that describes the style transformations
 >\
 >\
 >**parallaxTarget:** // OPTIONAL, defaults to the value for **el**
 >\
->the dom node to target with style and class updates, if different than **el**
+>The dom node to target with style and class updates, if different than **el**
 >\
 >\
 >**classTargets:** // OPTIONAL
@@ -72,42 +76,42 @@ PYT.addNode({
 
 >**property:** // REQUIRED
 >\
->the css property to animated, camelcase
+>The css property to animated, camelcase
 >\
 >\
 >**startValue:** // OPTIONAL, REQUIRED ONLY FOR COLORS, default varies
 >\
->the starting value for the animation
+>The starting value for the animation
 >\
 >\
 >**endValue:** // OPTIONAL, REQUIRED FOR COLORS, default varies
 >\
->the ending value for the animation
+>The ending value for the animation
 >\
 >\
 >**units:** // OPTIONAL, IGNORED FOR COLORS, default varies
 >\
->the desired unit (ex. 'px', '%')
+>The desired unit (ex. 'px', '%')
 >\
 >\
 >**startingPerc:** // OPTIONAL, default 1
 >\
->the starting position of the animation in the viewport, as a percent from 0-1
+>The starting position of the animation in the viewport, as a percent from 0-1
 >\
 >\
 >**endingPerc:** // OPTIONAL, default 0
 >\
->the ending position of the animation in the viewport, as a percent from 0-1
+>The ending position of the animation in the viewport, as a percent from 0-1
 >\
 >\
->**startsWithBottom:** // OPTIONAL, EXPERIMENTAL, default FALSE
+>**startWithBottom:** // OPTIONAL, EXPERIMENTAL, default FALSE
 >\
->measure the starting point for the animation from the bottom of the target el rather than the top, TRUE / FALSE
+>Measure the starting point for the animation from the bottom of the target el rather than the top, TRUE / FALSE
 >\
 >\
 >**endWithTop:** // OPTIONAL, EXPERIMENTAL, default FALSE
 >\
->measure the ending point for the animation from the top of the target el rather than the bottom, TRUE / FALSE
+>Measure the ending point for the animation from the top of the target el rather than the bottom, TRUE / FALSE
 >\
 >\
 >**callback:** // OPTIONAL, EXPERIMENTAL
@@ -140,22 +144,22 @@ PYT.addTriggerNode({
 
 >**el:** // REQUIRED
 >\
->the dom node to monitor for scroll position
+>The dom node to monitor for scroll position
 >\
 >\
 >**class:** // REQUIRED
 >\
->the class to add when the el is in range
+>The class to add when the el is in range
 >\
 >\
 >**triggerPerc:** // OPTIONAL, defaults to .8
 >\
->the viewport position where the class will be added, measured from the top of **el**, as a percent from 0-1
+>The viewport position where the class will be added, measured from the top of **el**, as a percent from 0-1
 >\
 >\
 >**animateOnce:** // OPTIONAL, defaults to FALSE
 >\
->whether the animation trigger should only occur once, permanently adding the class to the target
+>Whether the animation trigger should only occur once, permanently adding the class to the target
 >\
 >\
 >**classTargets:** // OPTIONAL
