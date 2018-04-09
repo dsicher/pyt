@@ -34,25 +34,23 @@ export default class PYT {
       this.currentBreakpoint = 'web';
     }
   }
-  addNode(config) {
-    if (config.breakpoints) {
-      this.nodes.push(new pytResponsiveNode(config, this.pytBreakpoint));
+  nodeHandler(node, responsiveNode, config) {
+    if (config.breakpoints && this.pytBreakpoint) {
+      this.nodes.push(new responsiveNode(config, this.pytBreakpoint));
     } else {
-      this.nodes.push(new pytNode(config));
+      if (config.breakpoints) {
+        console.warn('Attempting to add a responsive node to a non-responsive PYT instance. Add a breakpoint config to your new PYT() call.');
+      }
+      this.nodes.push(new node(config));
     }
+  }
+  addNode(config) {
+    this.nodeHandler(pytNode, pytResponsiveNode, config);
   }
   addTriggerNode(config) {
-    if (config.breakpoints) {
-      this.nodes.push(new pytResponsiveTriggerNode(config, this.pytBreakpoint));
-    } else {
-      this.nodes.push(new pytTriggerNode(config));
-    }
+    this.nodeHandler(pytTriggerNode, pytResponsiveTriggerNode, config);
   }
   addCallbackNode(config) {
-    if (config.breakpoints) {
-      this.nodes.push(new pytResponsiveCallbackNode(config, this.pytBreakpoint));
-    } else {
-      this.nodes.push(new pytCallbackNode(config));
-    }
+    this.nodeHandler(pytCallbackNode, pytResponsiveCallbackNode, config);
   }
 }

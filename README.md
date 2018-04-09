@@ -30,9 +30,32 @@ PYT needs to be instantiated via class constructor.
 
 ```var PYT = new pyt();```
 
+Add responsive behavior to your PYT instance by passing it a breakpoint configuration.
+
+```
+var PYT = new pyt({
+  breakpoints: {
+    mobile: 768,
+    tablet: 1024
+  }  
+});
+```
+
 PYT has methods to create three types of scroll-controlled nodes:
 
 ```PYT.addNode(), PYT.addTriggerNode(), and PYT.addCallbackNode()```
+
+If the PYT instance has a breakpoint configuration, you can add a `breakpoints` property to the node configuration object. Set a breakpoint to `true` in the configuration object to enable the scroll effect at that breakpoint. For example, the following config will only add and remove `my-class` from the target element at the web breakpoint.
+
+```
+ex. PYT.addTriggerNode({
+  el: document.getElementById('myElement'),
+  class: 'my-class',
+  breakpoints: {
+    web: true
+  }
+})
+```
 
 ## .addNode()
 
@@ -69,6 +92,11 @@ PYT.addNode({
 >**classTargets:** // OPTIONAL
 >\
 >An array of DOM nodes that will also receive the class updates from this node
+>\
+>\
+>**breakpoints:** // OPTIONAL, only can be used if the pyt instance is configured for breakpoints
+>\
+>An object describing at which breakpoints to apply the scroll-controlled effect
 
 #### .addNode() parallaxConfig
 
@@ -182,6 +210,11 @@ PYT.addTriggerNode({
 >**reset:** // OPTIONAL, EXPERIMENTAL
 >\
 >A function to execute when removing the class to the dom node
+>\
+>\
+>**breakpoints:** // OPTIONAL, only can be used if the pyt instance is configured for breakpoints
+>\
+>An object describing at which breakpoints to apply the scroll-controlled effect
 
 ## .addCallbackNode()
 
@@ -230,13 +263,26 @@ PYT.addCallbackNode({
 >**reset:** // OPTIONAL
 >\
 >A function to execute when the node leaves the threshold
+>\
+>\
+>**breakpoints:** // OPTIONAL, only can be used if the pyt instance is configured for breakpoints
+>\
+>An object describing at which breakpoints to apply the scroll-controlled effect
 
 ## Examples
 ```
-var PYT = new pyt();
+var PYT = new pyt({
+  breakpoints: {
+    mobile: 768, // mobile breakpoint is up to 767px
+    tablet: 1024 // tablet breakpoint is up to 1023px, web is everything above
+  }
+});
 
 PYT.addNode({
   el: document.getElementById('myElement'),
+  breakpoints: { // only add the parallax styles at the web breakpoint
+    web: true
+  },
   parallaxConfig: [
     {
       property: 'translateY',
@@ -288,6 +334,10 @@ PYT.addTriggerNode({
 
 PYT.addCallbackNode({
   el: document.getElementById('myCallbackElement'),
+  breakpoints: { // only trigger the callbackFn and resetFn calls at mobile and tablet breakpoints
+    mobile: true,
+    tablet: true
+  },
   startingPerc: .8,
   endingPerc: .2,
   callback: callbackFn,
