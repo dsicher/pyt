@@ -15,8 +15,7 @@ export default class PYT {
   }
   initBreakpoints(breakpoints) {
     if (breakpoints) {
-      pytUtils.requiredParameters('initBreakpoints', ['mobile', 'tablet'], breakpoints);
-      this.breakpoints = { ...breakpoints };
+      this.breakpoints = { mobile: 768, tablet: 1024, ...breakpoints };
       this.pytBreakpoint = () => this.currentBreakpoint;
       this.setCurrentBreakpoint();
       pytUtils.emitThrottledResize(this.setCurrentBreakpoint);
