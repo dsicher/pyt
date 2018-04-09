@@ -2,6 +2,7 @@ var simpleBezier = (p1, p2, percent) =>
   Math.pow(percent, 3) + p2 * 3 * Math.pow(percent, 2) * (1-percent) + p1 * 3 * percent * Math.pow(1-percent, 2);
 
 var requiredParameters = (fnName, requiredArray, optsObj) => {
+  if (!optsObj) { throw(`error: ${fnName} requires a parameter`) }
   var keys = Object.keys(optsObj);
   for (var i = 0 ; i < requiredArray.length ; i++) {
     if (keys.indexOf(requiredArray[i]) === -1) {
@@ -47,20 +48,24 @@ var removeClass = (el, className) => {
 };
 
 var dispatchCustomEvent = customEventName => {
-  var evt = document.createEvent('Event');
-  evt.initEvent(customEventName, true, true);
+  var evt = new Event(customEventName);
   if (window.dispatchEvent) { window.dispatchEvent(evt); }
     else if (window.fireEvent) { window.fireEvent(evt); }
     else { throw('this browser does not support custom events'); }
 };
 
-var throttleEvent = (eventToThrottle, newEvent) => {
+var throttleEvent = (eventToThrottle, newEvent, emitFn) => {
   var blockEvents = false;
 
-  var dispatchThrottledEvent = () => {
-    dispatchCustomEvent(newEvent);
-    blockEvents = false;
-  }
+  var dispatchThrottledEvent = emitFn
+    ? () => {
+      emitFn();
+      dispatchCustomEvent(newEvent);
+      blockEvents = false;
+    } : () => {
+      dispatchCustomEvent(newEvent);
+      blockEvents = false;
+    }
 
   var throttledEventListener = () => {
     if (blockEvents) { return; }
@@ -78,9 +83,9 @@ var emitThrottledScroll = () => {
   }
 }
 
-var emitThrottledResize = () => {
+var emitThrottledResize = setCurrentBreakpoint => {
   if (!window.emittingThrottledResize) {
-    throttleEvent('resize', 'pyt-throttled-resize');
+    throttleEvent('resize', 'pyt-throttled-resize', setCurrentBreakpoint);
     window.emittingThrottledResize = true;
   }
 }

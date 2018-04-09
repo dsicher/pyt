@@ -17,7 +17,7 @@ export default class pytTriggerNode {
 
     this.classTargets = config.classTargets ? [this.parallaxTarget].concat(config.classTargets) : [this.parallaxTarget];
 
-    window.addEventListener('pyt-throttled-scroll', this.updateTriggerClass);
+    window.addEventListener('pyt-throttled-scroll', this.handleScroll);
     window.addEventListener('pyt-throttled-resize', this.handleResize);
 
     this.updateTriggerHeight();
@@ -29,9 +29,15 @@ export default class pytTriggerNode {
     this.updateTriggerClass();
   }
 
-  updateTriggerHeight = () => this.triggerHeight = window.innerHeight * this.triggerPerc;
+  handleScroll = () => {
+    this.updateTriggerClass();
+  }
 
-  updateTriggerClass = () => {
+  updateTriggerHeight() {
+    this.triggerHeight = window.innerHeight * this.triggerPerc;
+  }
+
+  updateTriggerClass() {
     this.elPosition = this.el.getBoundingClientRect();
 
     if (this.elPosition.top < this.triggerHeight) {

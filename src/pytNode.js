@@ -31,43 +31,43 @@ export default class pytNode {
       this.parallaxTarget.style[pytProp.property] = pytProp.returnCurrentStyle(delta);
     }
   }
-  getParallaxArea = i => this.parallaxOpts[i].endingPerc > this.parallaxOpts[i].startingPerc
-    ? this.el.offsetHeight - this.parallaxOpts[i].parallaxStart - this.parallaxOpts[i].parallaxEnd
-    : this.el.offsetHeight + this.parallaxOpts[i].parallaxStart - this.parallaxOpts[i].parallaxEnd;
-  getParallaxTarget = i => (1-((this.getTargetEnd(i) - this.parallaxOpts[i].parallaxEnd) / this.getParallaxArea(i)));
-  getTargetStart = i => this.parallaxOpts[i].startWithBottom ? this.elPosition.bottom : this.elPosition.top;
-  getTargetEnd = i => this.parallaxOpts[i].endWithTop ? this.elPosition.top : this.elPosition.bottom;
+  getParallaxArea = pytProp => pytProp.endingPerc > pytProp.startingPerc
+    ? this.el.offsetHeight - pytProp.parallaxStart - pytProp.parallaxEnd
+    : this.el.offsetHeight + pytProp.parallaxStart - pytProp.parallaxEnd;
+  getParallaxTarget = pytProp => (1-((this.getTargetEnd(pytProp) - pytProp.parallaxEnd) / this.getParallaxArea(pytProp)));
+  getTargetStart = pytProp => pytProp.startWithBottom ? this.elPosition.bottom : this.elPosition.top;
+  getTargetEnd = pytProp => pytProp.endWithTop ? this.elPosition.top : this.elPosition.bottom;
   checkScroll = (pytProp, i, arr) => {
-    if (this.getTargetStart(i) < this.parallaxOpts[i].parallaxStart && this.getTargetEnd(i) > this.parallaxOpts[i].parallaxEnd) {
-      this.calculateStyles(pytProp, this.getParallaxTarget(i));
+    if (this.getTargetStart(pytProp) < pytProp.parallaxStart && this.getTargetEnd(pytProp) > pytProp.parallaxEnd) {
+      this.calculateStyles(pytProp, this.getParallaxTarget(pytProp));
       if (this.pytState[i] != 'pyt') {
         pytUtils.addClass(this.classTargets, `pyt-${pytProp.pytClass}`);
         pytUtils.removeClass(this.classTargets, [`pre-pyt-${pytProp.pytClass}`, `post-pyt-${pytProp.pytClass}`]);
         this.pytState[i] = 'pyt';
-        this.parallaxOpts[i].callback && this.parallaxOpts[i].callback();
+        pytProp.callback && pytProp.callback();
       }
-    } else if (this.getTargetStart(i) >= this.parallaxOpts[i].parallaxStart) {
+    } else if (this.getTargetStart(pytProp) >= pytProp.parallaxStart) {
       if (this.pytState[i] != 'prepyt') {
         pytUtils.addClass(this.classTargets, `pre-pyt-${pytProp.pytClass}`);
         pytUtils.removeClass(this.classTargets, [`pyt-${pytProp.pytClass}`, `post-pyt-${pytProp.pytClass}`]);
         this.pytState[i] = 'prepyt';
         this.calculateStyles(pytProp, 0);
-        this.parallaxOpts[i].preFn && this.parallaxOpts[i].preFn();
+        pytProp.preFn && pytProp.preFn();
       }
-    } else if (this.getTargetEnd(i) <= this.parallaxOpts[i].parallaxEnd) {
+    } else if (this.getTargetEnd(pytProp) <= pytProp.parallaxEnd) {
       if (this.pytState[i] != 'postpyt') {
         pytUtils.addClass(this.classTargets, `post-pyt-${pytProp.pytClass}`);
         pytUtils.removeClass(this.classTargets, [`pre-pyt-${pytProp.pytClass}`, `pyt-${pytProp.pytClass}`]);
         this.pytState[i] = 'postpyt';
         this.calculateStyles(pytProp, 1);
-        this.parallaxOpts[i].postFn && this.parallaxOpts[i].postFn();
+        pytProp.postFn && pytProp.postFn();
       }
     }
   }
   updateAllParallaxPoints = () => {
     this.parallaxOpts.forEach(el => el.updateParallaxPoints());
   }
-  parallaxAllProperties = () => {
+  parallaxAllProperties() {
     this.transformStrings = [];
     this.elPosition = this.el.getBoundingClientRect();
 

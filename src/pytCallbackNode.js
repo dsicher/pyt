@@ -21,7 +21,11 @@ export default class pytCallbackNode {
 
   handleResize = () => {
     this.updateCallbackPoints();
-    this.handleScroll();
+    this.callFns();
+  }
+
+  handleScroll = () => {
+    this.callFns();
   }
 
   updateCallbackPoints = () => {
@@ -29,7 +33,7 @@ export default class pytCallbackNode {
     this.cbEnd = window.innerHeight * this.endingPerc;
   };
 
-  handleScroll = () => {
+  callFns() {
     var elPosition = this.el.getBoundingClientRect();
     var targetStart = this.startWithBottom ? elPosition.bottom : elPosition.top;
     var targetEnd = this.endWithTop ? elPosition.top : elPosition.bottom;
