@@ -1,6 +1,3 @@
-var simpleBezier = (p1, p2, percent) =>
-  Math.pow(percent, 3) + p2 * 3 * Math.pow(percent, 2) * (1-percent) + p1 * 3 * percent * Math.pow(1-percent, 2);
-
 var requiredParameters = (fnName, requiredArray, optsObj) => {
   if (!optsObj) { throw(`error: ${fnName} requires a parameter`) }
   var keys = Object.keys(optsObj);
@@ -91,7 +88,6 @@ var emitThrottledResize = setCurrentBreakpoint => {
 }
 
 export default {
-  simpleBezier,
   requiredParameters,
   hasClass,
   addClass,
