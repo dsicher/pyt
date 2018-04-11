@@ -51,6 +51,24 @@ var dispatchCustomEvent = customEventName => {
     else { throw('this browser does not support custom events'); }
 };
 
+var requestAnimationFramePolyfill = () => {
+  if (window.requestAnimationFrame) { return; }
+  var legacyPolyfill = () => {
+    if (!Date.now) { Date.now = () => new Date().getTime() }
+    var prevFrame = 0;
+    return fn => {
+      var now = Date.now();
+      var nextFrame = Math.max(prevFrame + 16, now);
+      var rafFn = () => { prevFrame = nextFrame; fn(); }
+      var rafTime = nextFrame - now;
+      return setTimeout(rafFn, rafTime);
+    };
+  }
+  window.requestAnimationFrame = window.webkitRequestAnimationFrame
+    || window.mozRequestAnimationFrame
+    || legacyPolyfill();
+}
+
 var throttleEvent = (eventToThrottle, newEvent, emitFn) => {
   var blockEvents = false;
 
@@ -67,7 +85,7 @@ var throttleEvent = (eventToThrottle, newEvent, emitFn) => {
   var throttledEventListener = () => {
     if (blockEvents) { return; }
     blockEvents = true;
-    requestAnimationFrame(dispatchThrottledEvent);
+    window.requestAnimationFrame(dispatchThrottledEvent);
   };
 
   window.addEventListener(eventToThrottle, throttledEventListener);
@@ -94,4 +112,5 @@ export default {
   removeClass,
   emitThrottledScroll,
   emitThrottledResize,
+  requestAnimationFramePolyfill,
 }

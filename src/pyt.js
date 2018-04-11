@@ -8,6 +8,8 @@ import pytResponsiveCallbackNode  from './pytResponsiveCallbackNode';
 
 export default class PYT {
   constructor(config) {
+    pytUtils.requestAnimationFramePolyfill();
+
     this.nodes = [];
 
     this.initBreakpoints(config.breakpoints);
