@@ -1,5 +1,4 @@
 import pytUtils from './pytUtils';
-import pytProperty from './pytProperty';
 import pytTriggerNode from './pytTriggerNode';
 
 export default class pytResponsiveTriggerNode extends pytTriggerNode {

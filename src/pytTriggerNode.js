@@ -1,5 +1,4 @@
 import pytUtils from './pytUtils';
-import pytProperty from './pytProperty';
 
 export default class pytTriggerNode {
   constructor(config) {
