@@ -32,13 +32,25 @@ PYT needs to be instantiated via class constructor.
 
 Add responsive behavior to your PYT instance by passing it a breakpoint configuration.
 
+You can configure breakpoints however you like: the key is the name of the breakpoint and the value can contain a `min`, `max`, or both.
+
 ```
 var PYT = new pyt({
   breakpoints: {
-    mobile: 768,
-    tablet: 1024
-  }  
+    my: { max: 499 },
+    custom: { min: 500, max: 799 },
+    breakpoints: { min: 800 }
+  }
 });
+```
+
+If you set `breakpoints: 'default'`, you will have `mobile`, `tablet`, and `web` breakpoints, configured as follows:
+
+
+```
+mobile: { max: 767 },
+tablet: { min: 768, max: 1023 },
+web: { min: 1024 }
 ```
 
 PYT has methods to create three types of scroll-controlled nodes:
@@ -272,10 +284,7 @@ PYT.addCallbackNode({
 ## Examples
 ```
 var PYT = new pyt({
-  breakpoints: {
-    mobile: 768, // mobile breakpoint is up to 767px
-    tablet: 1024 // tablet breakpoint is up to 1023px, web is everything above
-  }
+  breakpoints: 'default'
 });
 
 PYT.addNode({

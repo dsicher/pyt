@@ -17,7 +17,15 @@ export default class PYT {
   }
   initBreakpoints(breakpoints) {
     if (breakpoints) {
-      this.breakpoints = { mobile: 768, tablet: 1024, ...breakpoints };
+      if (breakpoints === 'default') {
+        this.breakpoints = {
+          mobile: { max: 767 },
+          tablet: { min: 768, max: 1023 },
+          web: { min: 1024 },
+        };
+      } else {
+        this.breakpoints = { ...breakpoints };
+      }
       this.pytBreakpoint = () => this.currentBreakpoint;
       this.setCurrentBreakpoint();
       pytUtils.emitThrottledResize(this.setCurrentBreakpoint);
@@ -28,13 +36,17 @@ export default class PYT {
   }
   setCurrentBreakpoint = () => {
     var currentWidth = window.innerWidth;
-    if (currentWidth < this.breakpoints.mobile) {
-      this.currentBreakpoint = 'mobile';
-    } else if (currentWidth < this.breakpoints.tablet) {
-      this.currentBreakpoint = 'tablet';
-    } else {
-      this.currentBreakpoint = 'web';
-    }
+    var updatedBreakpoint = false;
+    Object.keys(this.breakpoints).forEach(breakpoint => {
+      if (!updatedBreakpoint) {
+        var minCondition = !this.breakpoints[breakpoint].min || currentWidth >= this.breakpoints[breakpoint].min;
+        var maxCondition = !this.breakpoints[breakpoint].max || currentWidth <= this.breakpoints[breakpoint].max;
+        if (minCondition && maxCondition) {
+          updatedBreakpoint = breakpoint;
+        }
+      }
+    });
+    this.currentBreakpoint = updatedBreakpoint;
   }
   nodeHandler(node, responsiveNode, config) {
     if (config.breakpoints && this.pytBreakpoint) {
