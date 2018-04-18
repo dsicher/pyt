@@ -206,10 +206,10 @@ export default class pytProperty {
     this.initColorProperty();
   }
   translateX() {
-    this.initTransformProperty(-100, 0, 'px');
+    this.initTransformProperty(-50, 50, 'px');
   }
   translateY() {
-    this.initTransformProperty(-100, 0, 'px');
+    this.initTransformProperty(-50, 50, 'px');
   }
   translateZ() {
     this.initTransformProperty(-100, 0, 'px');

@@ -283,57 +283,23 @@ PYT.addCallbackNode({
 
 ## Examples
 ```
+// example: Instantiate a pyt instance with default responsive breakpoints (mobile, tablet, and web)
 var PYT = new pyt({
   breakpoints: 'default'
 });
 
+// example: Add a vertical parallax animation to the target element.
+//
+// By default, PYT starts an animation when the top of the el is at the bottom of the viewport,
+// and ends an animation when the bottom of the element is at the top of the viewport.
+// The default values for a translateY animation are 'px' units, starting at -50 and ending at 50.
+// Since we like all of these default values, we only need to provide a target element and the property to animate.
 PYT.addNode({
-  el: document.getElementById('myElement'),
-  breakpoints: { // only add the parallax styles at the web breakpoint
-    web: true
-  },
-  parallaxConfig: [
-    {
-      property: 'translateY',
-      startValue: 0,
-      endValue: 200,
-      startingPerc: 1,
-      endingPerc: 0,
-      units: 'px'
-    },
-    {
-      property: 'opacity',
-      startValue: 0,
-      endValue: 1,
-      startingPerc: .8,
-      endingPerc: .5,
-      units: ''
-    }
-  ]
+  el: document.getElementById('parallax'),
+  parallaxConfig: { property: 'translateY', },
 });
 
-PYT.addNode({
-  el: document.getElementById('myOtherElement'),
-  parallaxConfig: [
-    {
-      property: 'translateZ',
-      startValue: 0,
-      endValue: -200,
-      startingPerc: .5,
-      endingPerc: 0,
-      units: 'px'
-    },
-    {
-      property: 'height',
-      startValue: 600,
-      endValue: 15,
-      startingPerc: .5,
-      endingPerc: 0,
-      units: 'px'
-    }
-  ]
-})
-
+// example: Add the class my-class to a trigger element when it is at 60% viewport height, and never remove that class.
 PYT.addTriggerNode({
   el: document.getElementById('myTriggerElement'),
   class: 'my-class',
@@ -341,9 +307,14 @@ PYT.addTriggerNode({
   animateOnce: true
 });
 
+// example: Call our js functions callbackFn and resetFn when the trigger element is on screen.
+//
+// For this example we call the onscreen function when the top of the element is at 80% viewport height,
+// and call the offscreen function when the bottom of the element is at 20% viewport height.
+// We will only call these functions if the viewport is at the mobile or tablet breakpoint.
 PYT.addCallbackNode({
   el: document.getElementById('myCallbackElement'),
-  breakpoints: { // only trigger the callbackFn and resetFn calls at mobile and tablet breakpoints
+  breakpoints: {
     mobile: true,
     tablet: true
   },
@@ -351,5 +322,26 @@ PYT.addCallbackNode({
   endingPerc: .2,
   callback: callbackFn,
   reset: resetFn,
+});
+
+// example: Progress bar width tracks page scroll.
+PYT.addNode({
+  el: document.body,
+  parallaxTarget: document.getElementById('progress'),
+  parallaxConfig: {
+    // For this example, we want our parallaxTarget to animate from width: 0% to width: 100%
+    property: 'width',
+    startValue: '0',
+    endValue: '100',
+    units: '%',
+    // With a startingPerc config, PYT starts an animation when the top of the el is at startingPerc * viewport height.
+    // For this example, we want our progress bar to begin tracking when the top of the body element
+    // is at the top of the page, so we set startingPerc to 0.
+    startingPerc: 0,
+    // With a endingPerc config, PYT ends an animation when the bottom of the el is at endingPerc * viewport height.
+    // For this example, we want our progress bar to end tracking when the bottom of the body element
+    // is at the bottom of the page, so we set endingPerc to 1.
+    endingPerc: 1,
+  }
 });
 ```
