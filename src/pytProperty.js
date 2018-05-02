@@ -236,28 +236,3 @@ export default class pytProperty {
     this.initTransformProperty(-100, 0, 'px');
   }
 }
-
-/* TODO:
-  pytProperty.prototype.transformOrigin = function() {
-    this.requires(['startX', 'endX', 'startY', 'endY'], config);
-  }
-
-  boxShadow,
-
-  clip,
-
-  columnGap,
-  columnRuleColor,
-  columnRuleWidth,
-  columnWidth,
-
-  filter,
-
-  perspective,
-  perspectiveOrigin,
-
-  textShadow,
-
-  transform,
-  transformOrigin
-*/
