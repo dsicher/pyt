@@ -14,7 +14,7 @@ Fast, dependency-free, flexible parallax
 
 Use scroll position to create smooth animations, trigger CSS classes, or trigger function calls.
 \
-Most CSS properties implemented for smooth parallax, more documentation coming soon.
+More documentation and demo page coming soon.
 
 ## Installation
 
