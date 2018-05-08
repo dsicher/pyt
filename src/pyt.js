@@ -12,7 +12,9 @@ export default class PYT {
 
     this.nodes = [];
 
-    this.initBreakpoints(config.breakpoints);
+    var breakpoints = config ? config.breakpoints : undefined;
+
+    this.initBreakpoints(breakpoints);
     pytUtils.emitThrottledScroll();
   }
   initBreakpoints(breakpoints) {
