@@ -9,6 +9,7 @@ export default class pytTriggerNode {
 
     this.class = config.class !== undefined ? config.class : 'animate';
     this.triggerPerc = config.triggerPerc !== undefined ? config.triggerPerc : .8;
+    this.triggerFromBottom = !!config.triggerFromBottom;
     this.animateOnce = !!config.animateOnce;
     this.callback = typeof config.callback === 'function' ? config.callback : false;
     this.reset = typeof config.reset === 'function' ? config.reset : false;
@@ -38,8 +39,9 @@ export default class pytTriggerNode {
 
   updateTriggerClass() {
     this.elPosition = this.el.getBoundingClientRect();
+    var triggerVal = this.triggerFromBottom ? this.elPosition.bottom : this.elPosition.top;
 
-    if (this.elPosition.top < this.triggerHeight) {
+    if (triggerVal < this.triggerHeight) {
       if (this.pytState !== 'pyt') {
         pytUtils.addClass(this.classTargets, this.class);
         this.callback && this.callback();

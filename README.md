@@ -209,6 +209,11 @@ PYT.addTriggerNode({
 >Whether the animation trigger should only occur once, permanently adding the class to the target
 >\
 >\
+>**triggerFromBottom:** // OPTIONAL, defaults to FALSE
+>\
+>Whether the animation trigger should measure position from the bottom of the el
+>\
+>\
 >**classTargets:** // OPTIONAL
 >\
 >An array of DOM nodes that will also receive the class updates from this node
