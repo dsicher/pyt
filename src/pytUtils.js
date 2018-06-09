@@ -1,3 +1,20 @@
+// Custom event polyfill
+// https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
+(function () {
+  if ( typeof window.CustomEvent === "function" ) return false;
+
+  function CustomEvent ( event, params ) {
+    params = params || { bubbles: false, cancelable: false, detail: undefined };
+    var evt = document.createEvent( 'CustomEvent' );
+    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+    return evt;
+   }
+
+  CustomEvent.prototype = window.Event.prototype;
+
+  window.CustomEvent = CustomEvent;
+})();
+
 var requiredParameters = (fnName, requiredArray, optsObj) => {
   if (!optsObj) { throw(`error: ${fnName} requires a parameter`) }
   var keys = Object.keys(optsObj);
@@ -45,7 +62,7 @@ var removeClass = (el, className) => {
 };
 
 var dispatchCustomEvent = customEventName => {
-  var evt = new Event(customEventName);
+  var evt = new CustomEvent(customEventName);
   if (window.dispatchEvent) { window.dispatchEvent(evt); }
     else if (window.fireEvent) { window.fireEvent(evt); }
     else { throw('this browser does not support custom events'); }
