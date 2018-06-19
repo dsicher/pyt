@@ -6,7 +6,7 @@ export default class pytResponsiveCallbackNode extends pytCallbackNode {
     this.pytBreakpoint = pytBreakpoint;
     this.breakpoints = { ...config.breakpoints };
 
-    this.handleScroll();
+    window.requestAnimationFrame(this.handleResize);
   }
 
   callFns = () => {

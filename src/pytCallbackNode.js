@@ -15,8 +15,7 @@ export default class pytCallbackNode {
     window.addEventListener('pyt-throttled-scroll', this.handleScroll);
     window.addEventListener('pyt-throttled-resize', this.handleResize);
 
-    this.updateCallbackPoints();
-    this.handleScroll();
+    window.requestAnimationFrame(this.handleResize);
   }
 
   handleResize = () => {

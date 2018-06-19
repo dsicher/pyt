@@ -19,9 +19,8 @@ export default class pytTriggerNode {
 
     window.addEventListener('pyt-throttled-scroll', this.handleScroll);
     window.addEventListener('pyt-throttled-resize', this.handleResize);
-
-    this.updateTriggerHeight();
-    this.updateTriggerClass();
+    
+    window.requestAnimationFrame(this.handleResize);
   }
 
   handleResize = () => {

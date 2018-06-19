@@ -21,7 +21,7 @@ export default class pytNode {
     window.addEventListener('pyt-throttled-scroll', this.handleScroll);
     window.addEventListener('pyt-throttled-resize', this.handleResize);
 
-    this.handleResize();
+    window.requestAnimationFrame(this.handleResize);
   }
   pushConfig = config => this.parallaxOpts.push(new pytProperty(config))
   calculateStyles = (pytProp, delta) => {

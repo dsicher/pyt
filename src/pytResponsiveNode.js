@@ -6,7 +6,7 @@ export default class pytResponsiveNode extends pytNode {
     this.pytBreakpoint = pytBreakpoint;
     this.breakpoints = { ...config.breakpoints };
 
-    this.handleResize();
+    window.requestAnimationFrame(this.handleResize);
   }
 
   resetStyle = (pytProp, i) => {

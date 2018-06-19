@@ -7,7 +7,7 @@ export default class pytResponsiveTriggerNode extends pytTriggerNode {
     this.pytBreakpoint = pytBreakpoint;
     this.breakpoints = { ...config.breakpoints };
 
-    this.updateTriggerClass();
+    window.requestAnimationFrame(this.updateTriggerClass);
   }
 
   updateTriggerClass = () => {
